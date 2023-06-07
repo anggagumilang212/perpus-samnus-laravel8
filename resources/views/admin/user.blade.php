@@ -23,7 +23,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Data Peminjaman</h4>
+                        <h4 class="card-title">Data User</h4>
                         <!-- Button trigger modal -->
      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreate"><i class="fa fa-plus"></i>Tambah Data</button>
                         <div class="table-responsive">
@@ -31,11 +31,8 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Foto</th>
-                                        <th>Judul Buku</th>
-                                        <th>Tanggal Pinjam</th>
-                                        <th>Tanggal Kembali</th>
+                                        <th>Email</th>
+                                        <th>Password</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -43,19 +40,15 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                                     @php
                                     $no = 1;    
                                     @endphp
-                                    @foreach ($peminjaman as $item)
+                                    @foreach ($user as $item)
                                     <tr>
                                         <td>{{$no++}}</td>
-                                        <td>{{$item->nama}}</td>
-                                        <td><img src=" {{ asset('fotobuku/' . $item->foto) }}" alt=""
-                                            width="60px" height="40px"></td>
-                                        <td>{{$item->judul_buku}}</td>
-                                        <td>{{$item->tgl_pinjam}}</td>
-                                        <td>{{$item->tgl_kembali}}</td>
+                                        <td>{{$item->emal}}</td>
+                                        <td>{{$item->password}}</td>
                                         <td>
                                             <a href=# data-target="#modalEdit{{ $item->id }}" data-toggle="modal"
                                                 class="btn btn-ss btn-primary"><i class="fa fa-edit"></i></a>
-                                            <a href="{{ asset('admin/delete-peminjaman/' . $item->id) }}" button type="button"
+                                            <a href="{{ asset('admin/delete-user/' . $item->id) }}" button type="button"
                                                 class="btn btn-danger"
                                                 onClick="return confirm('Yakin akan menghapus data ini!')"></button><i
                                                     class="fa fa-trash"></i></a>
@@ -83,29 +76,18 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                      <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                      </button>
                  </div>
-                 <form action="create-peminjaman" method="POST" enctype="multipart/form-data">
+                 <form action="create-user" method="POST">
                     @csrf
                  <div class="modal-body">
-                    <label>Nama</label>
+                    <label>Email</label>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="nama" placeholder="masukkan nama">
+                        <input type="email" class="form-control" name="email" placeholder="masukkan email">
                     </div>
-                    <label>Foto</label>
+                    <label>Password</label>
                     <div class="form-group">
-                        <input type="file" class="form-control" name="foto">
+                        <input type="password" class="form-control" name="password" placeholder="masukkan Password">
                     </div>
-                    <label>Judul Buku </label>
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="judul_buku" placeholder="masukkan judul buku">
-                    </div>
-                    <label>Tanggal Pinjam</label>
-                    <div class="form-group">
-                        <input type="date" class="form-control" name="tgl_pinjam" placeholder="masukkan tanggal pinjam">
-                    </div>
-                    <label>Tanggal Kembali</label>
-                    <div class="form-group">
-                        <input type="date" class="form-control" name="tgl_kembali" placeholder="masukkan tanggal kembali">
-                    </div>
+                   
                  </div>
                  <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -116,7 +98,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
          </div>
      </div>
      <!-- Modal Edit-->
-     @foreach ($peminjaman as $item)
+     @foreach ($user as $item)
      <div class="modal fade" id="modalEdit{{ $item->id }}">
          <div class="modal-dialog modal-dialog-centered" role="document">
              <div class="modal-content">
@@ -125,33 +107,20 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                      <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                      </button>
                  </div>
-                 <form action="edit-peminjaman" method="POST" enctype="multipart/form-data">
+                 <form action="edit-user" method="POST">
                  @csrf
                  <div class="modal-body">
                     <input type="hidden" class="form-control" id="id" name="id"
                     value="{{ $item->id }}">
-                    <label>Nama</label>
+                    <label>Email</label>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="nama" value="{{ $item->nama }}" placeholder="masukkan nama">
+                        <input type="email" class="form-control" name="email" value="{{ $item->email }}" placeholder="masukkan email">
                     </div>
+                    <label>Password </label>
                     <div class="form-group">
-                        <label for="foto">Foto</label>
-                        <input type="file" class="form-control" id="foto" name="foto">
-                        <input class=" form-control" type="hidden" name="gambarLama"
-                            value="{{ $item->foto }}">
+                        <input type="password" class="form-control" name="password" value="{{ $item->password }}"  placeholder="masukkan password">
                     </div>
-                    <label>Judul Buku </label>
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="judul_buku" value="{{ $item->judul_buku }}"  placeholder="masukkan judul buku">
-                    </div>
-                    <label>Tanggal Pinjam</label>
-                    <div class="form-group">
-                        <input type="date" class="form-control" name="tgl_pinjam" value="{{ $item->tgl_pinjam }}" placeholder="masukkan tanggal pinjam">
-                    </div>
-                    <label>Tanggal Kembali</label>
-                    <div class="form-group">
-                        <input type="date" class="form-control" name="tgl_kembali" value="{{ $item->tgl_kembali }}" placeholder="masukkan tanggal kembali">
-                    </div>
+                  
                  </div>
                  <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
